@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "manga-api"
+version = "0.1.0"
+description = ""
+authors = ["Taruu <taruumax@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.112.0"
+sqlmodel = "^0.0.21"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

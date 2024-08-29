@@ -7,6 +7,11 @@ from sqlalchemy import create_engine
 from sqlmodel import Field, SQLModel, Enum, Column, Relationship
 
 
+class SourceHost(str, enum.Enum):
+    e_hentai = 0
+    hitomi_la = 1
+
+
 # class TagType(str, enum.Enum):
 #     # https://ehwiki.org/wiki/Namespace
 #     temp = "temp"
@@ -44,10 +49,17 @@ class VisualNovel(SQLModel, table=True):
 
     file_count: int = Field(default=0)
     file_size: int = Field(default=0)
-    
+
     rating: float
+    source_mirror: list["SourceMirror"]
     tags: list["Tag"] = Relationship(back_populates="heroes", link_model=TagsNovelLink)
     torrents: list["NovelTorrent"] = Relationship(back_populates="novel")
+
+
+class SourceMirror(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    host: SourceHost = Field(default=-1)
+    url: str
 
 
 class TagType(SQLModel, table=True):

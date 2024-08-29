@@ -6,6 +6,8 @@ import enum
 from sqlalchemy import create_engine
 from sqlmodel import Field, SQLModel, Enum, Column, Relationship
 
+from .config import database_url
+
 
 class SourceHost(str, enum.Enum):
     e_hentai = 0
@@ -51,13 +53,15 @@ class VisualNovel(SQLModel, table=True):
     file_size: int = Field(default=0)
 
     rating: float
-    source_mirror: list["SourceMirror"]
+    source_mirror: list["SourceMirror"] = Relationship(back_populates="novel")
     tags: list["Tag"] = Relationship(back_populates="heroes", link_model=TagsNovelLink)
     torrents: list["NovelTorrent"] = Relationship(back_populates="novel")
 
 
 class SourceMirror(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    novel_id: int | None = Field(default=None, foreign_key="visualnovel.id", primary_key=True)
+    novel: VisualNovel = Relationship(back_populates="source_mirror")
     host: SourceHost = Field(default=-1)
     url: str
 
@@ -91,9 +95,10 @@ class NovelTorrent(SQLModel, table=True):
     f_size: int
 
 
-if __name__ == "__main__":
-    sqlite_file_name = "database.db"
-    sqlite_url = f"sqlite:///{sqlite_file_name}"
+connect_args = {"check_same_thread": False}
+engine = create_engine(database_url, echo=False, connect_args=connect_args)
 
-    engine = create_engine(sqlite_url, echo=True)
+
+def create_db_and_tables():
+    """Create database model"""
     SQLModel.metadata.create_all(engine)

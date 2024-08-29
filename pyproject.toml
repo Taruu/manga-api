@@ -11,6 +11,8 @@ fastapi = "^0.112.0"
 sqlmodel = "^0.0.21"
 gradio = "^4.42.0"
 archivefile = {extras = ["all"], version = "^1.0.0"}
+dynaconf = "^3.2.6"
+loguru = "^0.7.2"
 
 
 [build-system]

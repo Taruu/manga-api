@@ -2,24 +2,14 @@ import os
 import glob
 
 from fastapi import APIRouter
-from ..config import novel_folder
+
 
 router = APIRouter(prefix="/index")
-
-ARCHIVE_TYPES = ['zip', "7z", "tar.*", "tar", 'rar']
-
-
-def all_archives():
-    for archive_type in ARCHIVE_TYPES:
-        for archive_path in glob.glob(f"{novel_folder}/**/*.{archive_type}", recursive=True):
-            yield archive_path
 
 
 @router.get('/')
 async def index_status():
     """Get Index folders status """
-    files_list = list(all_archives())
-    print(files_list)
 
     return {"files": 10}
 
